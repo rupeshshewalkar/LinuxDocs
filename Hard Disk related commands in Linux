@@ -1,0 +1,118 @@
+Hard Disk related commands in Linux
+
+
+Checking Disk capacity, Partition tables, etc.
+[root@server ~]# fdisk -l
+
+Get Detailed/current information directly from hard drive
+[root@server ~]# hdparm -I /dev/sda
+
+Check available/used/free spaces in each partitions
+[root@server ~]# df -h
+
+Check Hard drive speeds
+[root@server ~]# hdparm -Tt /dev/sda
+
+To list the partition tables for the specified devices
+#fdisk -l
+
+Pass print option to displays the partition table
+#parted /dev/sda print
+
+To display all disks and storage controllers in the system
+#lshw -class disk -class storage
+
+Find Out Disks Name Only
+#lshw -short -C disk
+
+The smartctl command act as a control and monitor Utility for SMART disks under Linux and Unix like operating systems
+#smartctl -d ata -a -i /dev/sda
+
+Partition the new disk using fdisk command
+#fdisk -l | grep '^Disk'
+
+Format the new disk using mkfs.ext3 command
+#mkfs.ext3 /dev/sdb1
+
+Mount the new disk using mount command
+#mkdir /disk1
+#mount /dev/sdb1 /disk1
+#df -H
+
+Label the partition
+#e2label /dev/sdb1 /backup
+
+Checking the Hard Disk for errors
+#fsck.file_system_type, E.g #fsck.ext3
+
+Show list of partitions mounted
+# df -h    [man]
+
+show the used space by installed deb packages, sorting by size
+#dpkg-query -W -f='${Installed-Size;10}t${Package}n' | sort -k1,1n 
+
+Estimate space used by directory 'dir1'
+#du -sh dir1
+
+Show size of the files and directories sorted by size
+#du -sk * | sort -rn
+
+Show size of the files and directories ordered by size
+#ls -lSr |more
+
+Show space used by rpm packages installed sorted by size
+# rpm -q -a --qf '%10{SIZE}t%{NAME}n' | sort -k1,1n
+
+Format a floppy disk
+# fdformat -n /dev/fd0
+
+Create a filesystem type linux ext2 on hda1 partition
+# mke2fs /dev/hda1
+
+Create a filesystem type linux ext3 on hda1 partition
+# mke2fs -j /dev/hda1
+
+Create a filesystem type linux on hda1 partition
+# mkfs /dev/hda1
+
+Create a FAT32 filesystem
+# mkfs -t vfat 32 -F /dev/hda1
+
+Create a swap filesystem
+# mkswap /dev/hda3
+
+Force umount when the device is busy
+# fuser -km /mnt/hda2
+
+Mount disk called hda2 - verify existence of the directory '/ mnt/hda2'
+# mount /dev/hda2 /mnt/hda2
+
+Mount a floppy disk
+# mount /dev/fd0 /mnt/floppy
+
+Mount a cdrom / dvdrom
+# mount /dev/cdrom /mnt/cdrom
+
+Mount a cdrw / dvdrom
+# mount /dev/hdc /mnt/cdrecorder
+
+Mount a cdrw / dvdrom   [man]
+# mount /dev/hdb /mnt/cdrecorder
+
+Mount a file or iso image
+# mount -o loop file.iso /mnt/cdrom
+
+Mount a Windows FAT32 file system
+# mount -t vfat /dev/hda5 /mnt/hda5
+
+Mount a usb pen-drive or flash-drive
+# mount /dev/sda1 /mnt/usbdisk
+
+Mount a windows network share
+# mount -t smbfs -o username=user,password=pass //WinClient/share /mnt/share
+
+Unmount disk called hda2 - exit from mount point '/ mnt/hda2' first
+# umount /dev/hda2
+
+Run umount without writing the file /etc/mtab - useful when the file is read-only or the hard disk is full
+# umount -n /mnt/hda2
