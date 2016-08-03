@@ -1,0 +1,230 @@
+find command in details
+
+
+Sample1: find all the files in /home with name test.txt. Here –name is used to specify the filename.
+
+find /home –name test.txt
+
+Sample2: find the files whose name is test.txt and in present working directory
+
+find . –name test.txt
+
+Sample3: find all the files whose name contains both capital letters and small letters in it.
+
+find /home –iname test.txt
+
+Sample4: Search for only directories whose name is var in / directory
+
+find / -type d –name var
+
+Sample5: Search for an mp3 files whose name is temp.mp3
+
+find / -type f –name temp.mp3
+
+Sample6:Search for a file name test.txt and its permissions are 775 in a given box
+
+find / -perm 775 –name test.txt
+
+Sample7: How about searcing files with SUID bit set and file permissions are 755?
+
+find / -perm 4755
+
+Sample8:How can i find SGID bit set files with 644 permissions?
+
+find / -perm 2644
+
+Sample9: How can i find Sticky bit set files in my system with permissions 551?
+
+find / -perm 1551
+
+Sample10:Search for all the files whose SUID bit is set
+
+find / -perm /u=s
+
+Sample11: Search for all the files whose SGID bit is set
+
+find / -perm /g+s
+
+Sample12: Search for all the files  whose StickyBit is set
+
+find / -perm /o=t
+
+Sample13: Search for all the files whose owener permissions is read only.
+
+find / -perm /u=r
+
+Sample14:Search for all the files which have user, group and others with executable permissions
+
+find / -perm /a=x
+
+Sample15: Search for all the files with name test.txt and the owner of this file is user
+
+find / -user user –name test.txt
+
+Sample16: find all the files whos name is test.txt and owned by a group called redcluster
+
+find / -group redcluster –name test.txt
+
+Sample17: Search for a file: test.txt whose file status is changed more than 90 days back
+
+find / -ctime +90 –name test.txt
+
+Sample18: Search for all the files which are modified exactly 90 days back
+
+find / -mtime 90
+
+Sample19: Search for all the files with name test.txt which is accessed less than 90 days
+
+find / -atime -90
+
+Sample20: find all the files which are modified more than 90 days back and less than 180 days
+
+find / -mtime +90 –mtime -180
+
+Sample21: find all the files changed less than 30mins
+
+find / -cmin -30
+
+Sample22: find all the files modified exactly 30 mins back
+
+find / -mmin 30
+
+Sample23: find all the files accessed more than 30 mins back
+
+find / -amin +30
+
+Sample24: find all the files which are modified more than 5mins back and less than 25mins
+
+find / -mmin +5 –mmin -25
+
+Sample25: I have new file called test.txt which is just created, now I want to get all the files which are created later this file creation.
+
+find / -newer test.txt
+
+Sample26: Search for files whose size is more than 10bytes
+
+find / -size +10c
+
+Sample27: Search for files which are exactly 10kb in /opt folder
+
+find /opt –size 10k
+
+Sample28: Search for files which are less than 10MB in /var folder
+
+find /var –size -10M
+
+Sample29: Search for files which are more than 1GB size in /usr folder
+
+find /usr –size +1G
+
+Sample30: find all the empty files in my system
+
+find / -size 0k
+
+Sample31:find all the files which are with more than size 100MB and less than 1GB and the owner of the file is xyz and the file name is Adda.txt in /red folder
+
+find /red –size +100M –size -1G –user xyz –iname adda.txt
+
+Sample32:find all the files with SGID for the group sales and with size exactly 100MB with file name as pass.txt under /opt
+
+find /opt –size 100M –group sales –perm g+s –name pass.txt
+
+Sample33: find all the files which are more than 100MB and less than 1GB in size.
+
+find / -size +100M –size -1G
+or
+find / -size +100M -a -size -1G
+
+Sample34:find a file with passwd.txt in /var folder and long list this file for checking file properties.
+
+find /var –iname passwd.txt –exec ls –l {} \;
+
+Sample35: Find all the files with name test.txt in /mnt and change the ownership of the files from user to Narendra
+
+find /mnt –user user –name test.txt –exec chown narendra: {} \;
+-exec command {} \; –for executing a command on find files -inum -For finding a file with inode number
+
+Sample36:Find all the files with name test.sh in /abc folder and then grep if for word is there in that file or not
+
+find /abc –name test.sh –exec grep ‘for’ {} \;
+chmod, grep, ls, rm, mv, cp,md5sum
+
+Sample37: Find all the files with name xyz.txt owned by user in /var/ftp/pub and change the permissions to 775 to them.
+
+find /var/ftp –user user –name xyz.txt –exec chmod 775 {} \;
+
+Sample 38:Find all the files with name temp.txt in /xyz folder and backup then compress them to send it for saving
+
+Find /xyz –name xyz.txt –exec tar xvfz temp.tar.gz {} \;
+
+Sample39:Find files with name abc.txt in /home directory and take backup of each file before modifying it.
+
+find /home –name abc.txt –exec cp {} {}.bkf \;
+This above command will create files with .bkf extension whenever it finds abc.txt file.
+
+Sample40:Find files which are more than 1GB and not accessed for the past 6 months and delete them.
+
+find / -size +1G -mtime +180 –exec rm –rf {} \;
+
+Sample41:Find all the files with executable permissions and display their checksum value
+
+find / -perm /a=x -exec md5sum {} \;
+
+Sample42:find all the files with name abc.txt and owner as user then move them to /opt folder
+
+find / -user user -name abc.txt -exec mv {} /opt/ \;
+
+Sample43:Find files with abc.txt name in /opt directory change the owner permissions from user to Narendra and change the permissions to 775
+
+find /opt –user user –name abc.txt –exec chown Narendra: {} \; -exec chmod 775 {} \;
+
+
+Sample44: Find all the commands which ends with .sh file extension in /opt folder
+
+find /opt –name *.sh
+
+Sample45:
+
+find /opt –name \*.sh
+Or
+find /opt –name “*.sh”
+Note: These two will work, because you negated your shell parsing * wild character.
+
+Sample46:Search for all the files which start with abc and ends with different extension in /opt folder
+
+find /opt –name abc.\*
+
+Sample47:Search for files which start with red and ends with many names such as redhat, redtop, redsoap etc.
+
+find / -name red\*
+
+Sample 48:How about search for files which always end with dump.
+
+find / -name \*dump
+
+Sample49: Find abc.txt file in /opt and /var folder at a time
+
+find /opt /var –name abc.txt
+The above command will search in only two locations i.e. in /opt and /var Search multiple locations but not in particular location. Sample50:Search in entire system expect /proc folder
+
+find / -path /proc -prune -name cpuinfo
+The -path variable to define the path of a location. And -prune combined with -path will say not to descend in to the mention path /proc
+
+Sample51:Search for abc.txt in /opt and /var expect in /var/tmp folder
+
+find /opt /var -path /var/tmp -prune -name abc.txt
+
+Sample52:I want to search for abc.txt and hash.c file at a time. This can be achieved by using -o operator
+
+find / -name abc.txt -o -name hash.c
+Here when ever find command sees -o it just or the options on its left and right hand side.
+
+Sample53:How about i want to find two directories say opt and var how can i find them?
+
+find / -type d \( -name opt -o -name var \)
+
+Sample54: Negation operator is useful for negating a search team. for Sample we want to find all the files with name abc.txt which don’t have 755 permissions
+
+find . -type f ! -perm 755 -name abc.txt
+
+
