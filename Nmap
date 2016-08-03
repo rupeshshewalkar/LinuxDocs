@@ -1,0 +1,39 @@
+nmap in details
+
+nmap is a tool to check the status of ports in any machine
+
+Example1 : To scan a particular system for open ports
+#nmap hostname
+
+Example2 : Scanning for a single port on a machine
+#nmap –p 22 hostname
+–p indicates port.
+
+Example3 : For scanning only ports
+#nmap –F hostname
+
+-F is for fast scan and this will not do any other scanning like IP address, hostname, operating system, and uptime etc.
+
+Example4 : Scanning only TCP ports
+#nmap –sT hostname
+-s is for scanning and T is for only scanning of TCP ports
+
+Example5 : Scanning only UDP ports
+#nmap –sU hostname
+-U indicates UDP port scanning
+
+Exmaple6 : Scan for ports and get the version of different services running on that machine
+#nmap –sV hostname
+-V indicates version of each network service running on that host
+
+Example7 : Check which protocol is supported by the remote machine
+#nmap –sO hostname
+
+Example8 : Scan a system for operating system and uptime details
+# nmap -O hostname
+-O is for operating system scan along with default port scan
+
+Example9 : Scan a network
+#nmap networkID/subnetmask
+For the above command you can try in this way
+#nmap x.x.x.x/24
