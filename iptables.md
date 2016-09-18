@@ -136,89 +136,95 @@ Iptable’s Raw table is for configuration excemptions. Raw table has the follow
 
 ### Block traffic from a specific MAC address
 
-**Suppose you want to bloc traffic some a MAC address instead of an IP address. This is handy if a DHCP server is changing the IP of the maching you want to protect from.**
+Suppose you want to bloc traffic some a MAC address instead of an IP address. This is handy if a DHCP server is changing the IP of the maching you want to protect from.
 
     iptables -A INPUT -m mac --mac-source 00:11:2f:8f:f8:f8 -j DROP
     
     
-Block a specific port
+**Block a specific port**
 
-If all you want is to block a port, iptables can still do it.
+If all you want is to block a port, iptables can still do it. And you can block incoming or outgoing traffic.Block incoming traffic to a port
 
-And you can block incoming or outgoing traffic.
+**Suppose we need to block port 21 for incoming traffic:**
 
-Block incoming traffic to a port
+    iptables -A INPUT -p tcp --destination-port 21 -j DROP
 
-Suppose we need to block port 21 for incoming traffic:
 
-iptables -A INPUT -p tcp --destination-port 21 -j DROP
-But if you have two-NIC server, with one NIC facing the Internet and the other facing your local private Network, and you only one to block FTP access from outside world.
+**But if you have two-NIC server, with one NIC facing the Internet and the other facing your local private Network, and you only one to block FTP access from outside world**.
 
-iptables -A INPUT -p tcp -i eth1 -p tcp --destination-port 21 -j DROP
-In this case I'm assuming eth1 is the one facing the Internet.
+	iptables -A INPUT -p tcp -i eth1 -p tcp --destination-port 21 -j DROP
+	In this case I'm assuming eth1 is the one facing the Internet.
 
-You can also block a port from a specific IP address:
+**You can also block a port from a specific IP address:**
 
-iptables -A INPUT -p tcp -s 22.33.44.55 --destination-port 21 -j DROP
+	iptables -A INPUT -p tcp -s 22.33.44.55 --destination-port 21 -j DROP
+
 Or even block access to a port from everywhere but a specific IP range.
 
-iptables -A INPUT p tcp -s ! 22.33.44.0/24 --destination-port 21 -j DROP
-Block outgoing traffic to a port
+	iptables -A INPUT p tcp -s ! 22.33.44.0/24 --destination-port 21 -j DROP
 
-If you want to forbid outgoing traffic to port 25, this is useful, in the case you are running a Linux firewall for your office, and you want to stop virus from sending emails.
+**Block outgoing traffic to a port**
 
-iptables -A FORWARD -p tcp --dport 25 -j DROP
+If you want to forbid outgoing traffic to port 25, this is useful, in the case you are running a Linux firewall for your office, and you want to stop virus from sending emails
+
+	iptables -A FORWARD -p tcp --dport 25 -j DROP
+
 I'm using FORWARD, as in this example the server is a firewall, but you can use OUTPUT too, to block also server self traffic.
 
-Log traffic, before taking action
+### Log traffic, before taking action
 
 If you want to log the traffic before blocking it, for example, there is a rule in an office, where all employees have been said not to log into a given server, and you want to be sure everybody obeys the rule by blocking access to ssh port. But, at the same time you want to find the one who tried it.
 
-iptables -A INPUT -p tcp --dport 22 -j LOG --log-prefix "dropped access to port 22"
-iptables -A INPUT -p tcp --dport 22 -j DROP
+    iptables -A INPUT -p tcp --dport 22 -j LOG --log-prefix "dropped access to port 22"
+    iptables -A INPUT -p tcp --dport 22 -j DROP
+
 You will be able to see which IP tried to access the server, but of course he couldn't.
 
 Tips and Tricks
 Because iptables executes the rules in order, if you want to change something you need to insert the rule in the specific position, or the desired effect is not going to be achieved.
 
-List rules with numbers
-
-iptables -nL --line-numbers
+**List rules with numbers**
+	
+    iptables -nL --line-numbers
+    
 This is going to list all your rules with numbers preceding the rules. Determine where you want the inserted rule and write:
 
-List specific chains
+**List specific chains**
 
-iptables -nL INPUT
+	iptables -nL INPUT
+
 Will list all INPUT rules.
 
-iptables -nL FORWARD
+	iptables -nL FORWARD
+
 Will list all OUTPUT rules
 
-Insert rules
+### Insert rules
 
-iptables -I INPUT 3 -s 10.0.0.0/8 -j ACCEPT
+	iptables -I INPUT 3 -s 10.0.0.0/8 -j ACCEPT
+
 That is going to add a rule in position 3 of the "array"
 
-Delete rules
+### Delete rules
 
-iptables -D INPUT 3
+	iptables -D INPUT 3
 That is going to remove the rule inserted above. You can also remove it, by matching it.
 
 iptables -D INPUT -s 10.0.0.0/8 -j ACCEPT
 Delete flush all rules and chains
 
-This steps are very handy if you want to start with a completely empty and default tables:
+### This steps are very handy if you want to start with a completely empty and default tables:
 
-iptables --flush
-iptables --table nat --flush
-iptables --table mangle --flush
-iptables --delete-chain
-iptables --table nat --delete-chain
-iptables --table mangle --delete-chain			   
+    iptables --flush
+    iptables --table nat --flush
+    iptables --table mangle --flush
+    iptables --delete-chain
+    iptables --table nat --delete-chain
+    iptables --table mangle --delete-chain			   
+
 				   
 				   
-				   
-Explain on ESTABLISHED,state & related 
+## Explain on ESTABLISHED,state & related
 
 iptables -A FORWARD -s 0/0 -i eth0 -d 192.168.1.58 -o eth1 -p TCP \
          --sport 1024:65535 -m multiport --dports 80,443 -j ACCEPT
