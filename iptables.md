@@ -23,38 +23,50 @@ Filter is default table for iptables. So, if you don’t define you own table, y
 
 Iptable’s NAT table has the following built-in chains.
 
-PREROUTING chain – Alters packets before routing. i.e Packet translation happens immediately after the packet comes to the system (and before routing). This helps to translate the destination ip address of the packets to something that matches the routing on the local server. This is used for DNAT (destination NAT).
-POSTROUTING chain – Alters packets after routing. i.e Packet translation happens when the packets are leaving the system. This helps to translate the source ip address of the packets to something that might match the routing on the desintation server. This is used for SNAT (source NAT).
-OUTPUT chain – NAT for locally generated packets on the firewall.
-3. Mangle table
+**PREROUTING chain**– Alters packets before routing. i.e Packet translation happens immediately after the packet comes to the system (and before routing). This helps to translate the destination ip address of the packets to something that matches the routing on the local server. This is used for DNAT (destination NAT).
+
+**POSTROUTING chain** – Alters packets after routing. i.e Packet translation happens when the packets are leaving the system. This helps to translate the source ip address of the packets to something that might match the routing on the desintation server. This is used for SNAT (source NAT).
+
+**OUTPUT chain**– NAT for locally generated packets on the firewall.
+
+
+### 3. Mangle table
 
 Iptables’s Mangle table is for specialized packet alteration. This alters QOS bits in the TCP header. Mangle table has the following built-in chains.
 
-PREROUTING chain
-OUTPUT chain
-FORWARD chain
-INPUT chain
-POSTROUTING chain
-4. Raw table
+      PREROUTING chain
+      OUTPUT chain
+      FORWARD chain
+      INPUT chain
+      POSTROUTING chain
+
+
+###4. Raw table
 
 Iptable’s Raw table is for configuration excemptions. Raw table has the following built-in chains.
 
-PREROUTING chain
-OUTPUT chain
+      PREROUTING chain
+      OUTPUT chain
 
 
-Syntax Ipatable command
+## Syntax iptable command
 
-iptable -t <table_name> <action>  <packet pattern> -j <what to do>
+### iptable -t <table_name> <action>  <packet pattern> -j <what to do>
 
 
-<table_name> : filter(default), nat, mangle and raw 
+**<table_name> :**
+			
+            filter(default), nat, mangle and raw 
 
-<action> : 1)-A (--append) is append into one of the chains 
+**<action> :**
+		  
+          1)-A (--append) is append into one of the chains 
   
-           INPUT:Incoming to firewall. For packets coming to the local server.
-		   OUTPUT:Outgoing from firewall. For packets generated locally and going out of the local server.
-		   FORWARD:packet for another NIC on the local server. For packets routed through the local server.
+           		INPUT:Incoming to firewall. For packets coming to the local server.
+                
+		   		OUTPUT:Outgoing from firewall. For packets generated locally and going out of the local server.
+		   
+           		FORWARD:packet for another NIC on the local server. For packets routed through the local server.
 		   
 		   2) -D (--delete) is delete a rule from a chain. specify the rule by the number or the packet pattern
 		   
@@ -64,57 +76,71 @@ iptable -t <table_name> <action>  <packet pattern> -j <what to do>
 		   
 		   
 		   
-<Packet Pattern> : -s ip_address : All packets are checked for specific source IP address  like -s 192.168.1.23  or -s 192.168.1.0/24
-                   -d ip_address : All packets are checked for specific destination IP address   like -d 192.168.1.23  or -d 192.168.1.0/24
+**<Packet Pattern> :**
+
+				   -s ip_address : All packets are checked for specific source IP address  like -s 192.168.1.23  or -s 192.168.1.0-24
+                   -d ip_address : All packets are checked for specific destination IP address   like -d 192.168.1.23  or -d 192.168.1.0-24
 				   -i interface  : All packets are checked for specific input interface i.e -i eth0 or -i eth1
+                   
 				   -o interface  : All packets are checked for specific output interface i.e -i eth0 or -i eth1
-				   -p port 		 : All packets are checked for specific port i.e tcp/udp/icmp
+                   
+				   -p port 		 : All packets are checked for specific port i.e tcp OR udp ORicmp
+                   
                    -sport number : All packets are checked for specific source port number i.e -sport 22 or -sport 21
+                   
 				   -dport number : All packets are checked for specific destination port number i.e -dport 22 or -dport 21
 				   
-				   -m multiport --sports <port, port> :A variety of TCP/UDP source ports separated by commas. Unlike when -m isn't used, they do not have to be within a range.
-				   -m multiport --dports <port, port> :A variety of TCP/UDP destination ports separated by commas. Unlike when -m isn't used, they do not have to be within a range.
-				   -m multiport --ports <port, port>  :A variety of TCP/UDP ports separated by commas. Source and destination ports are assumed to be the same and they do not have to be within a range.
-				   -m --state <state> : The most frequently tested states are:
+				   -m multiport --sports port, port :A variety of TCP OR UDP source ports separated by commas. Unlike when -m isnot used, they do not have to be within a range.
+                   
+				   -m multiport --dports port, port :A variety of TCP OR UDP destination ports separated by commas. Unlike when -m isnot used, they do not have to be within a range.
+                   
+				   -m multiport --ports port, port  :A variety of TCP OR UDP ports separated by commas. Source and destination ports are assumed to be the same and they do not have to be within a range.
+                   
+				   -m --state state : The most frequently tested states are:
+                   
 										ESTABLISHED: The packet is part of a connection that has seen packets in both directions
 										NEW: The packet is the start of a new connection
+                                        
 										RELATED: The packet is starting a new secondary connection. This is a common feature of such protocols such as an FTP data transfer, or an ICMP error.
-										INVALID: The packet couldn't be identified. Could be due to insufficient system resources, or ICMP errors that don't match an existing data flow.
+                                        
+										INVALID: The packet couldnot be identified. Could be due to insufficient system resources, or ICMP errors that don't match an existing data flow.
 
-				   
-<what to do> : -j DROP The packet is dropped. No message is sent to the requesting computer
-               -j REJECT The packet is rejected & error message is sent to the requesting computer 
+**<what to do> :**
+
+				-j DROP The packet is dropped. No message is sent to the requesting computer
+               
+               -j REJECT The packet is rejected and error message is sent to the requesting computer 
+               
                -J ACCEPT The packet is allowed to proceed as specified with -A action: INPUT, OUTPUT OR FORWARD
 
 
 
 
+## EXAMPLES
 
+**Block from an IP**
 
+    iptables -A INPUT -s 11.22.33.44 -j DROP
 
+**If you want to block only on an specific NIC**
 
-EXAMPLES
+    iptables -A INPUT -s 11.22.33.44 -i eth0 -j DROP
 
+**Or an specific port**
 
-Block IP traffic from an specific IP or Network.
+    iptables -A INPUT -s 11.22.33.44 -p tcp -dport 22 -j DROP
+    
+**Using a Network and not only one IP**
 
-Block from an IP
+    iptables -A INPUT -s 11.22.33.0/24 -j DROP
 
-iptables -A INPUT -s 11.22.33.44 -j DROP
-If you want to block only on an specific NIC
+### Block traffic from a specific MAC address
 
-iptables -A INPUT -s 11.22.33.44 -i eth0 -j DROP
-Or an specific port
+**Suppose you want to bloc traffic some a MAC address instead of an IP address. This is handy if a DHCP server is changing the IP of the maching you want to protect from.**
 
-iptables -A INPUT -s 11.22.33.44 -p tcp -dport 22 -j DROP
-Using a Network and not only one IP
-
-iptables -A INPUT -s 11.22.33.0/24 -j DROP
-Block traffic from a specific MAC address
-
-Suppose you want to bloc traffic some a MAC address instead of an IP address. This is handy if a DHCP server is changing the IP of the maching you want to protect from.
-
-iptables -A INPUT -m mac --mac-source 00:11:2f:8f:f8:f8 -j DROP
+    iptables -A INPUT -m mac --mac-source 00:11:2f:8f:f8:f8 -j DROP
+    
+    
 Block a specific port
 
 If all you want is to block a port, iptables can still do it.
