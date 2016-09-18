@@ -1,21 +1,25 @@
-## A New Post
 
-	iptables:
-	iptables tool is used to manage the Linux firewall rules.
-	 structure is: iptables -> Tables -> Chains -> Rules. 
+### iptables
+
+iptables tool is used to manage the Linux firewall rules.
+
+**structure is: iptables -> Tables -> Chains -> Rules.**
 	 
-	 I. IPTABLES TABLES and CHAINS
 
-IPTables has the following 4 built-in tables.
 
-1. Filter Table
+## IPTables has the following 4 built-in tables.
+
+### 1. Filter Table
 
 Filter is default table for iptables. So, if you don’t define you own table, you’ll be using filter table. Iptables’s filter table has the following built-in chains.
 
-INPUT chain – Incoming to firewall. For packets coming to the local server.
-OUTPUT chain – Outgoing from firewall. For packets generated locally and going out of the local server.
-FORWARD chain – Packet for another NIC on the local server. For packets routed through the local server.
-2. NAT table
+**INPUT chain** – Incoming to firewall. For packets coming to the local server.
+
+**OUTPUT chain**– Outgoing from firewall. For packets generated locally and going out of the local server.
+
+**FORWARD chain** – Packet for another NIC on the local server. For packets routed through the local server.
+
+### 2. NAT table
 
 Iptable’s NAT table has the following built-in chains.
 
